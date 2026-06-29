@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Ефекти колеса</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body class="locked">
+    <section id="login-screen" class="login-screen">
+        <form id="login-form" class="login-box">
+            <h1>Вхід до ефектів</h1>
+            <label for="login-name">Логін</label>
+            <input id="login-name" type="text" autocomplete="username" />
+
+            <label for="login-password">Пароль</label>
+            <input id="login-password" type="password" autocomplete="current-password" />
+
+            <div id="login-error" class="login-error" aria-live="polite"></div>
+            <button type="submit">Увійти</button>
+        </form>
+    </section>
+
+    <section class="effects-board">
+        <div class="inventory"></div>
+        <div class="add-block">
+            <button class="add-cell" type="button" title="Додати комірку">+</button>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+
+        <div class="selector">
+            <ul></ul>
+            <div class="clear"></div>
+        </div>
+
+        <div class="information">
+            <div class="cell-left-margin obs-hide">
+                <label for="cell-left-margin">Накладання комірок:</label>
+                <input id="cell-left-margin" type="range" step="1" min="-50" max="0" value="-14">
+            </div>
+
+            <div class="obs-hide">
+                <h1>Ефекти Владовороту</h1>
+                <p>Натисни на комірку, щоб вибрати категорію з колеса. Стан зберігається в браузері.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="reference obs-hide">
+        <h2>Усі ефекти</h2>
+        <table class="effects-table">
+            <thead>
+                <tr>
+                    <th>Іконка</th>
+                    <th>Назва</th>
+                    <th>Тип</th>
+                    <th>Опис</th>
+                </tr>
+            </thead>
+            <tbody id="effects-table-body"></tbody>
+        </table>
+
+        <h2>Налаштування OBS</h2>
+        <ol class="obs-rules">
+            <li>Додай 2 джерела «Браузер» (не копіюванням). Ідея в тому, що перше джерело показується на сцені, а друге приховане, бо в ньому редагуються комірки через опцію «Взаємодіяти».</li>
+            <li>Встав посилання на цю сторінку.</li>
+            <li>Ширина: <code>504</code> (для 7 комірок у рядку), висота: <code>500</code>. Ширину можна зменшувати кратно <code>72</code> пікселям.</li>
+            <li>CSS для видимого джерела:
+                <pre>body { background-color: rgba(0, 0, 0, 0); margin: 0px auto; overflow: hidden; }
+.obs-hide { display: none; }</pre>
+            </li>
+            <li>Увімкни опцію «<input type="checkbox" checked disabled> Оновити браузер, коли сцена стає активною».</li>
+            <li>Після редагування комірок потрібно перемкнути видимість першого джерела, щоб підтягнути зроблені зміни.</li>
+        </ol>
+    </section>
+
+    <script src="../data/wheel-items.js"></script>
+    <script src="index.js"></script>
+</body>
+</html>
