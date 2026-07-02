@@ -250,6 +250,71 @@ function bindEvents() {
   });
 }
 
+function setupMobilePanels() {
+  const panelConfigs = [
+    { node: document.querySelector(".auth-panel"), label: "Вхід / керування" },
+    { node: document.querySelector(".player-panel"), label: "Статус гри" },
+    { node: document.querySelector(".side-stack"), label: "Меню гри" },
+    { node: document.querySelector(".bottom-grid article:nth-child(1)"), label: "Картки dunchoff" },
+    { node: document.querySelector(".bottom-grid article:nth-child(2)"), label: "Картки чату" },
+    { node: document.querySelector(".bottom-grid article:nth-child(3)"), label: "Логи" },
+    { node: document.querySelector(".saves-panel"), label: "Збереження" },
+  ].filter((item) => item.node);
+
+  const mobileQuery = window.matchMedia("(max-width: 1180px)");
+
+  panelConfigs.forEach(({ node, label }) => {
+    if (node.dataset.mobileCollapsibleReady) return;
+    node.dataset.mobileCollapsibleReady = "true";
+    node.classList.add("collapsible-panel");
+
+    const toggle = document.createElement("button");
+    toggle.className = "mobile-panel-toggle";
+    toggle.type = "button";
+    toggle.textContent = label;
+    toggle.setAttribute("aria-expanded", "true");
+
+    const content = document.createElement("div");
+    content.className = "mobile-panel-content";
+    while (node.firstChild) {
+      content.appendChild(node.firstChild);
+    }
+
+    node.append(toggle, content);
+
+    toggle.addEventListener("click", () => {
+      const isCollapsed = node.classList.toggle("is-collapsed");
+      toggle.setAttribute("aria-expanded", String(!isCollapsed));
+    });
+  });
+
+  function syncPanelState() {
+    panelConfigs.forEach(({ node }) => {
+      const toggle = node.querySelector(".mobile-panel-toggle");
+      if (!toggle) return;
+
+      if (mobileQuery.matches) {
+        if (!node.dataset.mobileStateTouched) {
+          node.classList.add("is-collapsed");
+          toggle.setAttribute("aria-expanded", "false");
+          node.dataset.mobileStateTouched = "true";
+        }
+      } else {
+        node.classList.remove("is-collapsed");
+        toggle.setAttribute("aria-expanded", "true");
+        delete node.dataset.mobileStateTouched;
+      }
+    });
+  }
+
+  syncPanelState();
+  if (mobileQuery.addEventListener) {
+    mobileQuery.addEventListener("change", syncPanelState);
+  } else {
+    mobileQuery.addListener(syncPanelState);
+  }
+}
+
 window.onerror = function onRuntimeError(msg, url, line, col, error) {
   const errorMsg = `Runtime Error: ${msg} (at ${line}:${col})`;
   console.error(errorMsg, error);
@@ -261,6 +326,7 @@ async function bootstrap() {
   const gameData = await loadGameData();
   store.state = gameData.state || createDefaultState();
   store.saveSlots = gameData.saveSlots || [];
+  setupMobilePanels();
   bindEvents();
   render();
 

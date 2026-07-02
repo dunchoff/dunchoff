@@ -2,11 +2,12 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vladovorot v.1</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="index.css?v=mobile-video-1">
 </head>
 <body>
     <div class="image-grid-view">
@@ -31,6 +32,10 @@
         </div>
 
         <div id="wheel-data-sets">
+            <button id="mobile-controls-toggle"
+                    class="mobile-controls-toggle"
+                    type="button"
+                    aria-expanded="false">Меню</button>
             <input id="volume-control" type="range" step="0.1" value="0.5" max="1" min="0" title="Гучність відео" />
 
             <div class="wheel-mode wheel-mode-fortune">
@@ -46,10 +51,6 @@
             <div class="break"></div>
 
             <button id="btn-edit" title="Редагувати список"></button>
-            <button id="effects-open"
-                    title="Ефекти"
-                    aria-label="Ефекти"
-                    type="button"></button>
             <a id="sources"
                title="Правила"
                aria-label="Правила"
@@ -90,7 +91,7 @@
         (function () {
             function startWheel() {
                 const script = document.createElement('script');
-                script.src = 'index.js';
+                script.src = 'index.js?v=mobile-controls-1';
                 document.body.appendChild(script);
             }
 

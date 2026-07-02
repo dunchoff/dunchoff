@@ -27,6 +27,7 @@
 body {
   margin: 0;
   min-height: 100vh;
+  overflow-x: hidden;
   color: var(--text);
   background:
     radial-gradient(circle at 12% 6%, rgba(216, 181, 75, 0.08), transparent 26rem),
@@ -180,6 +181,14 @@ button:disabled { cursor: not-allowed; opacity: .55; }
   gap: 14px;
 }
 
+.mobile-panel-toggle {
+  display: none;
+}
+
+.mobile-panel-content {
+  display: contents;
+}
+
 .bottom-grid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -205,6 +214,7 @@ button:disabled { cursor: not-allowed; opacity: .55; }
 
 .board-wrap {
   padding: 14px;
+  min-width: 0;
 }
 
 .players-list, .summary-list, .save-slots {
@@ -1257,6 +1267,127 @@ input[type="color"] { height: 42px; padding: 4px; }
   }
 }
 
+@media (max-width: 1180px) {
+  .app-shell {
+    max-width: 960px;
+  }
+
+  .topbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .topbar-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .game-layout {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .board-wrap {
+    order: 1;
+  }
+
+  .player-panel {
+    order: 2;
+  }
+
+  .side-stack {
+    order: 3;
+    grid-column: auto;
+    grid-template-columns: 1fr;
+  }
+
+  .bottom-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mobile-panel-toggle {
+    display: flex;
+    width: 100%;
+    min-height: 44px;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    padding: 0 12px;
+    color: var(--text);
+    background: var(--chalk-inner-bg);
+    background-size: cover;
+    background-position: center;
+    font-weight: 800;
+  }
+
+  .mobile-panel-toggle::after {
+    content: "+";
+    font-size: 22px;
+    line-height: 1;
+  }
+
+  .collapsible-panel:not(.is-collapsed) > .mobile-panel-toggle::after {
+    content: "-";
+  }
+
+  .collapsible-panel.is-collapsed > .mobile-panel-content {
+    display: none;
+  }
+
+  .collapsible-panel:not(.is-collapsed) > .mobile-panel-content {
+    display: contents;
+  }
+
+  .auth-panel.collapsible-panel {
+    border-radius: 18px;
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .auth-controls {
+    flex-wrap: wrap;
+  }
+
+  .auth-controls input {
+    min-width: 0;
+    flex: 1 1 150px;
+  }
+
+  .board {
+    min-height: auto;
+    width: 100%;
+    gap: 5px;
+    grid-template-columns: repeat(11, minmax(0, 1fr));
+    grid-template-rows: repeat(11, minmax(0, 1fr));
+  }
+
+  .sector {
+    border-radius: 6px;
+  }
+
+  .player-token {
+    width: 22px;
+    height: 22px;
+    bottom: 3px;
+  }
+
+  .token-a { left: 3px; }
+  .token-b { left: 22px; }
+
+  .cards-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .wheel-launch-panel {
+    position: static;
+  }
+
+  .side-action-row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
 @media (max-width: 1850px) and (min-width: 1351px) {
   .game-layout {
     grid-template-columns: 260px minmax(0, 1fr) 250px;
@@ -1316,9 +1447,72 @@ input[type="color"] { height: 42px; padding: 4px; }
     padding: 12px;
   }
 
+  .social-links {
+    position: static;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+
+  .social-link {
+    width: 38px;
+    height: 38px;
+  }
+
   .topbar, .panel-title-row, .board-toolbar, .toolbar-actions, .save-slot {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .game-layout {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .board-wrap {
+    order: 1;
+  }
+
+  .player-panel {
+    order: 2;
+  }
+
+  .side-stack {
+    order: 3;
+  }
+
+  .mobile-panel-toggle {
+    display: flex;
+    width: 100%;
+    min-height: 44px;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    padding: 0 12px;
+    color: var(--text);
+    background: var(--chalk-inner-bg);
+    background-size: cover;
+    background-position: center;
+    font-weight: 800;
+  }
+
+  .mobile-panel-toggle::after {
+    content: "+";
+    font-size: 22px;
+    line-height: 1;
+  }
+
+  .collapsible-panel:not(.is-collapsed) > .mobile-panel-toggle::after {
+    content: "-";
+  }
+
+  .collapsible-panel.is-collapsed > .mobile-panel-content {
+    display: none;
+  }
+
+  .collapsible-panel:not(.is-collapsed) > .mobile-panel-content {
+    display: contents;
   }
 
   .topbar-actions {
@@ -1346,7 +1540,10 @@ input[type="color"] { height: 42px; padding: 4px; }
 
   .board {
     min-height: auto;
-    gap: 4px;
+    width: 100%;
+    gap: 3px;
+    grid-template-columns: repeat(11, minmax(0, 1fr));
+    grid-template-rows: repeat(11, minmax(0, 1fr));
   }
 
   .sector {
@@ -1365,11 +1562,78 @@ input[type="color"] { height: 42px; padding: 4px; }
     grid-template-columns: 1fr;
   }
 
+  .card-item {
+    grid-template-rows: minmax(150px, 48vw) auto;
+  }
+
+  .card-image {
+    height: 100%;
+  }
+
+  .wheel-launch-panel {
+    position: static;
+  }
+
+  .side-action-row {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .modal-card {
+    padding: 12px;
+  }
+
+  .wheel-wrap,
+  .compact-wheel-wrap {
+    width: min(82vw, 420px);
+  }
+
   .review-item {
     grid-template-columns: 1fr;
   }
 
   .review-score {
     text-align: left;
+  }
+}
+
+@media (max-width: 420px) {
+  .app-shell {
+    padding: 8px;
+  }
+
+  .panel, .board-wrap {
+    padding: 10px;
+  }
+
+  .board {
+    gap: 2px;
+  }
+
+  .sector {
+    border-radius: 3px;
+  }
+
+  .sector-effect-image {
+    width: 48%;
+  }
+
+  .sector-number-image {
+    width: 28%;
+    height: 28%;
+  }
+
+  .player-token {
+    width: 13px;
+    height: 13px;
+    bottom: 2px;
+  }
+
+  .token-a { left: 2px; }
+  .token-b { left: 12px; }
+
+  .auth-controls .chalk-control-button,
+  .auth-panel > .chalk-control-button {
+    width: min(100%, 124px);
+    align-self: center;
   }
 }

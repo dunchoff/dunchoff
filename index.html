@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Сайт Дунчоффа</title>
   <link rel="icon" type="image/png" href="assets/images/logo-transparent.png" />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css?v=played-games-button-1" />
 </head>
 <body>
   <main class="site-shell">
@@ -13,6 +13,15 @@
       <a class="brand-logo" href="https://www.twitch.tv/dunchoff" target="_blank" rel="noreferrer" aria-label="Dunchoff Twitch">
         <img src="assets/images/logo-transparent.png" alt="" />
       </a>
+      <nav class="top-nav" aria-label="Навігація">
+        <a href="#about">Про мене</a>
+        <a href="#events">Події</a>
+      </nav>
+      <nav class="top-actions" aria-label="Основні посилання">
+        <a class="top-twitch-button" href="https://www.twitch.tv/dunchoff" target="_blank" rel="noreferrer" aria-label="Twitch">
+          <img src="assets/icons/social/twitch-negative.png" alt="" />
+        </a>
+      </nav>
       <nav class="top-socials" aria-label="Соціальні мережі">
         <a href="https://www.tiktok.com/@dunchoff" target="_blank" rel="noreferrer" aria-label="TikTok"><img src="assets/icons/social/tiktok.png" alt="" /></a>
         <a href="https://www.instagram.com/dunchoff/" target="_blank" rel="noreferrer" aria-label="Instagram"><img src="assets/icons/social/instagram.png" alt="" /></a>
@@ -34,9 +43,9 @@
         <h1><span>Dunchoff</span></h1>
         <p class="hero-copy">Мене звати Владислав, мені 30. Проживаю в Черкасах. Закінчив фізмат, працюю вчителем в школі. На стрімах Ви можете зустріти такі ігри: Hearthstone, Fortnite, Dota2, CS:GO та різні single-ігри. Також на стрімі є багато IRL контенту, все для Вашого задоволення<br><br>Граю в своє задоволення. Впевнений, кожен глядач може знайти для себе щось цікаве.</p>
         <div class="hero-actions">
-          <a class="primary-button" href="https://www.twitch.tv/dunchoff" target="_blank" rel="noreferrer">
-            <img src="assets/icons/monitor.svg" alt="" />
-            <span>Дивитися Twitch</span>
+          <a class="primary-button" href="https://docs.google.com/spreadsheets/d/1SoRbiHNCZE-vEYS1S6FRXIZBpCx49elOZs5bVSABj1M/edit?usp=sharing" target="_blank" rel="noreferrer">
+            <img src="assets/icons/external-link.svg" alt="" />
+            <span>Список пройдених ігор</span>
           </a>
         </div>
       </div>
@@ -44,7 +53,7 @@
 
     <section class="events-section" id="events">
       <div class="section-head">
-        <h2>Events</h2>
+        <h2>Події</h2>
       </div>
       <div class="event-slider">
         <button class="slider-arrow slider-arrow-left" type="button" data-slide="prev" aria-label="Попередні івенти">
@@ -58,6 +67,9 @@
               <p>Повна подорож світом Resident Evil: фільми, анімація та основні ігри серії.</p>
               <div class="event-card-actions">
                 <button class="event-menu-button" type="button" data-open-details aria-label="Деталі Resident Evil">...</button>
+                <a class="event-link-button" href="https://t.me/dunchoff_live/1143" target="_blank" rel="noreferrer" aria-label="Перейти до Resident Evil">
+                  <img src="assets/icons/external-link.svg" alt="" />
+                </a>
               </div>
             </div>
           </article>
@@ -68,6 +80,9 @@
               <p>Інтерактивний івент з Колесом Фортуни та випадковими соло-челенджами.</p>
               <div class="event-card-actions">
                 <button class="event-menu-button" type="button" data-open-details aria-label="Деталі Vladovorot">...</button>
+                <a class="event-link-button" href="pages/vladovorot/index.html" target="_blank" rel="noreferrer" aria-label="Перейти до Vladovorot">
+                  <img src="assets/icons/external-link.svg" alt="" />
+                </a>
               </div>
             </div>
           </article>
@@ -78,6 +93,9 @@
               <p>Настільна пригода для стрімів, де чат, удача й рішення змінюють події.</p>
               <div class="event-card-actions">
                 <button class="event-menu-button" type="button" data-open-details aria-label="Деталі DunchLand">...</button>
+                <a class="event-link-button" href="pages/dunchland/index.html" target="_blank" rel="noreferrer" aria-label="Перейти до DunchLand">
+                  <img src="assets/icons/external-link.svg" alt="" />
+                </a>
               </div>
             </div>
           </article>
@@ -88,6 +106,9 @@
               <p>Серія інтерактивних викликів з бінго, картками, правилами та участю глядачів.</p>
               <div class="event-card-actions">
                 <button class="event-menu-button" type="button" data-open-details aria-label="Деталі ДунІЛДО">...</button>
+                <a class="event-link-button" href="https://t.me/dunchoff_live/1188" target="_blank" rel="noreferrer" aria-label="Перейти до ДунІЛДО">
+                  <img src="assets/icons/external-link.svg" alt="" />
+                </a>
               </div>
             </div>
           </article>
@@ -97,6 +118,19 @@
         </button>
       </div>
     </section>
+
+    <footer class="site-footer">
+      <p>Тут збираються стріми, івенти, челенджі й дивні ідеї, які стали грою.</p>
+      <nav class="footer-socials" aria-label="Соціальні мережі">
+        <a href="https://www.tiktok.com/@dunchoff" target="_blank" rel="noreferrer" aria-label="TikTok"><img src="assets/icons/social/tiktok.png" alt="" /></a>
+        <a href="https://www.instagram.com/dunchoff/" target="_blank" rel="noreferrer" aria-label="Instagram"><img src="assets/icons/social/instagram.png" alt="" /></a>
+        <a href="https://www.youtube.com/@dunchoff" target="_blank" rel="noreferrer" aria-label="YouTube"><img src="assets/icons/social/youtube.png" alt="" /></a>
+        <a href="https://t.me/dunchoff_live" target="_blank" rel="noreferrer" aria-label="Telegram"><img src="assets/icons/social/telegram.png" alt="" /></a>
+        <a href="https://discord.com/invite/kcfPedFGNf" target="_blank" rel="noreferrer" aria-label="Discord"><img src="assets/icons/social/discord.png" alt="" /></a>
+        <a href="https://x.com/dunchoff" target="_blank" rel="noreferrer" aria-label="X"><img src="assets/icons/social/x.png" alt="" /></a>
+      </nav>
+      <small>© 2026 Dunchoff</small>
+    </footer>
 
   </main>
 

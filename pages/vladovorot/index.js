@@ -205,10 +205,11 @@ function getChallengeType(title) {
     return funChallenges.has(title) ? 'Р¤Р°РЅРѕРІРёР№' : 'Р†РіСЂРѕРІРёР№';
 }
 
-const effectsOpenButton = document.getElementById('effects-open');
+const mobileControlsToggle = document.getElementById('mobile-controls-toggle');
 
-if (effectsOpenButton) {
-    effectsOpenButton.addEventListener('click', function () {
-        window.open('effects/index.html', '_blank');
+if (mobileControlsToggle) {
+    mobileControlsToggle.addEventListener('click', function () {
+        const isOpen = document.body.classList.toggle('controls-open');
+        mobileControlsToggle.setAttribute('aria-expanded', String(isOpen));
     });
 }

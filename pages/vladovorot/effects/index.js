@@ -1,37 +1,5 @@
 'use strict';
 
-const loginForm = document.getElementById('login-form');
-const loginNameInput = document.getElementById('login-name');
-const loginPasswordInput = document.getElementById('login-password');
-const loginError = document.getElementById('login-error');
-const authKey = 'vladovorot-effects-auth';
-
-function unlockEffectsPage() {
-    document.body.classList.remove('locked');
-}
-
-if (sessionStorage.getItem(authKey) === '1') {
-    unlockEffectsPage();
-}
-
-if (loginForm && loginNameInput && loginPasswordInput && loginError) {
-    loginNameInput.focus();
-
-    loginForm.addEventListener('submit', event => {
-        event.preventDefault();
-
-        if (loginNameInput.value === 'dunchoff' && loginPasswordInput.value === 'vladovorot7890') {
-            sessionStorage.setItem(authKey, '1');
-            loginError.textContent = '';
-            unlockEffectsPage();
-            return;
-        }
-
-        loginError.textContent = 'Неправильний логін або пароль';
-        loginPasswordInput.select();
-    });
-}
-
 const items = [
     {
         img: '../images/default.png',

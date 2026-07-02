@@ -55,7 +55,7 @@ button { font: inherit; }
   object-fit: contain;
 }
 .top-socials {
-  display: flex;
+  display: none;
   align-items: center;
   gap: 18px;
 }
@@ -74,6 +74,47 @@ button { font: inherit; }
 .top-socials img {
   width: 18px;
   height: 18px;
+  object-fit: contain;
+}
+.top-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 26px;
+  margin-left: auto;
+}
+.top-nav a {
+  color: rgba(255,255,255,.78);
+  font-size: 13px;
+  line-height: 1;
+  transition: color .2s ease;
+}
+.top-nav a:hover {
+  color: #fff;
+}
+.top-actions {
+  display: flex;
+  align-items: center;
+  margin-left: 28px;
+}
+.top-twitch-button {
+  display: grid;
+  width: 30px;
+  aspect-ratio: 1;
+  place-items: center;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  opacity: .72;
+  transition: opacity .2s ease, transform .2s ease;
+}
+.top-twitch-button:hover {
+  opacity: 1;
+  transform: translateY(-1px);
+}
+.top-twitch-button img {
+  width: 19px;
+  height: 19px;
   object-fit: contain;
 }
 .main-nav,
@@ -290,7 +331,7 @@ h1 span {
   background: #fff;
   color: #000;
 }
-.event-card img {
+.event-card > img {
   position: relative;
   width: 100%;
   height: 178px;
@@ -321,9 +362,14 @@ h1 span {
   font-size: 12px;
   line-height: 1.55;
 }
-.event-content button {
+.event-content button,
+.event-link-button {
   width: 44px;
+  min-width: 44px;
+  max-width: 44px;
+  height: 36px;
   min-height: 36px;
+  flex: 0 0 44px;
   border: 0;
   border-radius: 10px;
   color: #fff;
@@ -332,21 +378,119 @@ h1 span {
 }
 .event-card-actions {
   display: flex;
+  gap: 8px;
   justify-content: flex-start;
+  align-items: center;
   margin-top: auto;
 }
 .event-menu-button {
   display: grid;
   place-items: center;
   padding: 0;
+  width: 44px;
+  min-width: 44px;
+  max-width: 44px;
+  height: 36px;
+  overflow: hidden;
   background: #000;
   color: #fff;
   font-size: 18px;
   line-height: 1;
   letter-spacing: 1px;
 }
-.event-card:hover img { transform: scale(1.03); opacity: .92; }
+.event-link-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  padding: 0;
+}
+.event-link-button img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
+.event-content .event-menu-button,
+.event-content .event-link-button {
+  width: 44px;
+  min-width: 44px;
+  max-width: 44px;
+  height: 36px;
+  min-height: 36px;
+  padding: 0;
+}
+.event-card:hover > img { transform: scale(1.03); opacity: .92; }
 .footer { display: none; }
+.site-footer {
+  position: relative;
+  z-index: 3;
+  width: min(1080px, calc(100% - 32px));
+  margin: 10px auto 0;
+  padding: 30px 0 38px;
+  border-top: 1px solid rgba(255,255,255,.22);
+  color: rgba(255,255,255,.82);
+  text-align: center;
+}
+.footer-brand {
+  color: #fff;
+  font-size: 20px;
+  line-height: 1.2;
+  font-weight: 500;
+}
+.site-footer p {
+  width: min(650px, 100%);
+  margin: 12px auto 0;
+  color: rgba(255,255,255,.68);
+  font-size: 13px;
+  line-height: 1.55;
+}
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  margin-top: 18px;
+}
+.footer-links a {
+  color: #fff;
+  font-size: 13px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  opacity: .82;
+  transition: opacity .2s ease;
+}
+.footer-links a:hover {
+  opacity: 1;
+}
+.footer-socials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 18px;
+}
+.footer-socials a {
+  display: grid;
+  width: 30px;
+  aspect-ratio: 1;
+  place-items: center;
+  opacity: .72;
+  transition: opacity .2s ease, transform .2s ease;
+}
+.footer-socials a:hover {
+  opacity: 1;
+  transform: translateY(-2px);
+}
+.footer-socials img {
+  width: 19px;
+  height: 19px;
+  object-fit: contain;
+}
+.site-footer small {
+  display: block;
+  margin-top: 20px;
+  color: rgba(255,255,255,.48);
+  font-size: 12px;
+}
 .modal { position: fixed; inset: 0; z-index: 40; display: none; place-items: center; padding: 20px; }
 .modal.is-open { display: grid; }
 .modal-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,.76); }
@@ -429,8 +573,10 @@ h1 span {
   object-fit: contain;
 }
 @media (max-width: 800px) {
-  .topbar { height: auto; justify-content: center; gap: 18px; padding: 24px 0; }
+  .topbar { height: auto; justify-content: center; gap: 18px; padding: 24px 0; flex-wrap: wrap; }
   .top-socials { flex-wrap: wrap; justify-content: center; }
+  .top-nav { order: 3; width: 100%; margin-left: 0; gap: 20px; }
+  .top-actions { margin-left: 0; }
   .main-nav { flex-wrap: wrap; gap: 18px; }
   .hero {
     min-height: 0;
