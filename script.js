@@ -3,6 +3,11 @@ const modalTitle = document.querySelector('#modal-title');
 const modalText = document.querySelector('.modal-empty');
 const modalImage = document.querySelector('.modal-event-image');
 const modalLink = document.querySelector('.modal-go-link');
+const eventGrid = document.querySelector('.event-grid');
+
+const SUPABASE_URL = 'https://ghrcqivsjcoggoqugkqd.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_AiKDSajkULgsPSod0etN5w_1kMcyeDE';
+const EVENTS_TABLE = 'site_events';
 
 const eventDescriptions = {
   "Двоє, не рахуючи dunchoff'a": "«Двоє, не рахуючи dunchoff'a» — тематичний мініівент, присвячений двом культовим пригодницьким серіям:\n\nIndiana Jones and the Great Circle\nUNCHARTED™: Legacy of Thieves Collection\n\nПопереду — загублені храми, стародавні артефакти, небезпечні пастки, погоні, перестрілки, головоломки та багато моментів, коли один неправильний крок може перевернути всю експедицію.\n\nГотуйся до великої пригоди. Скарби самі себе не знайдуть.",
@@ -45,8 +50,6 @@ window.addEventListener('keydown', (event) => {
   }
 });
 
-const eventGrid = document.querySelector('.event-grid');
-
 document.querySelectorAll('[data-slide]').forEach((button) => {
   button.addEventListener('click', () => {
     if (!eventGrid) return;
@@ -62,3 +65,84 @@ document.querySelectorAll('[data-slide]').forEach((button) => {
     });
   });
 });
+
+loadSupabaseEvents();
+
+async function loadSupabaseEvents() {
+  if (!eventGrid) return;
+
+  try {
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/${EVENTS_TABLE}?is_active=eq.true&select=title,summary,description,image_url,link_url,sort_order&order=sort_order.asc`, {
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: `Bearer ${SUPABASE_KEY}`,
+      },
+    });
+
+    if (!response.ok) return;
+
+    const events = await response.json();
+    if (!Array.isArray(events) || events.length === 0) return;
+
+    eventGrid.innerHTML = events.map(renderEventCard).join('');
+    bindDynamicEventDetails();
+  } catch (error) {
+    console.warn('Supabase events load failed', error);
+  }
+}
+
+function bindDynamicEventDetails() {
+  document.querySelectorAll('[data-open-details]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const card = button.closest('.event-card');
+      modalTitle.textContent = card.dataset.event;
+      modalText.textContent = card.dataset.description || eventDescriptions[card.dataset.event] || 'Event details will be added later.';
+
+      const cardImage = card.querySelector('img');
+      if (cardImage && modalImage) {
+        modalImage.src = cardImage.src;
+        modalImage.alt = card.dataset.event;
+      }
+      if (modalLink) {
+        modalLink.href = card.dataset.link || '#';
+      }
+
+      modal.classList.add('is-open');
+      modal.setAttribute('aria-hidden', 'false');
+    });
+  });
+}
+
+function renderEventCard(event) {
+  const title = event.title || 'Event';
+  const summary = event.summary || '';
+  const description = event.description || summary;
+  const imageUrl = event.image_url || 'assets/images/events/dunchland.png';
+  const linkUrl = event.link_url || '#';
+
+  return `
+    <article class="event-card" data-event="${escapeHtml(title)}" data-description="${escapeHtml(description)}" data-link="${escapeHtml(linkUrl)}">
+      <img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(title)}" />
+      <div class="event-content">
+        <h3>${escapeHtml(title)}</h3>
+        <p>${escapeHtml(summary)}</p>
+        <div class="event-card-actions">
+          <button class="event-menu-button" type="button" data-open-details aria-label="Details ${escapeHtml(title)}">...</button>
+          <a class="event-link-button" href="${escapeHtml(linkUrl)}" target="_blank" rel="noreferrer" aria-label="Open ${escapeHtml(title)}">
+            <img src="assets/icons/external-link.svg" alt="" />
+          </a>
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, (char) => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;',
+  }[char]));
+}

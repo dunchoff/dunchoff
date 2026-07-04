@@ -5,8 +5,8 @@
 const STORAGE_KEY = "dunchland-web-state-v4";
 const LEGACY_STORAGE_KEYS = ["dunchland-web-state-v3"];
 const SAVE_SLOTS_KEY = "dunchland-web-save-slots-v1";
-const SUPABASE_URL = "https://ywjjwivrhtimigqzwbbr.supabase.co";
-const SUPABASE_KEY = "sb_publishable_lxNmzDTHRxHSzKhFligi4g_BgBgJHzj";
+const SUPABASE_URL = "https://ghrcqivsjcoggoqugkqd.supabase.co";
+const SUPABASE_KEY = "sb_publishable_AiKDSajkULgsPSod0etN5w_1kMcyeDE";
 const SUPABASE_STATE_TABLE = "dunchland_state";
 const SUPABASE_STATE_ID = "current";
 
