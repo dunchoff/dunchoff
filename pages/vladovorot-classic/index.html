@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vladovorot Classic</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css?v=mobile-video-1">
+</head>
+<body>
+    <div class="image-grid-view">
+        <div class="hero-background">
+            <ul class="image-grid" id="image-grid"></ul>
+        </div>
+        <div class="hero-background-overlay"></div>
+    </div>
+
+    <div class="content">
+        <div id="video">
+            <video preload="auto">
+                <source />
+            </video>
+            <div class="overlay"></div>
+        </div>
+        <div id="canvas"></div>
+
+        <div id="item-image">
+            <div class="arc"></div>
+            <img src="images/default.png" alt="" />
+        </div>
+
+        <div id="wheel-data-sets">
+            <button id="mobile-controls-toggle"
+                    class="mobile-controls-toggle"
+                    type="button"
+                    aria-expanded="false">Меню</button>
+            <input id="volume-control" type="range" step="0.1" value="0.5" max="1" min="0" title="Гучність відео" />
+
+            <div class="wheel-mode wheel-mode-fortune">
+                <input type="radio" id="fortune-wheel" name="list" value="fortune" autocomplete="off" checked />
+                <label for="fortune-wheel">Колесо Фортуни</label>
+            </div>
+
+            <div class="break"></div>
+
+            <button id="btn-edit" title="Редагувати список"></button>
+            <a id="sources"
+               title="Правила"
+               aria-label="Правила"
+               href="https://docs.google.com/spreadsheets/d/1PkXys2Cg4Jvm2kupSVMdQ3CxQyDAssuIu8PUCCOXm0g/edit?usp=sharing"
+               target="_blank"></a>
+        </div>
+
+        <div id="custom-list" class="dialog">
+            <label>
+                Свій список<br />
+                <textarea rows="15" cols="50"></textarea>
+            </label>
+            <hr />
+            <button>Застосувати</button>
+        </div>
+
+        <div id="dialog-edit" class="dialog">
+            <div class="presets"></div>
+            <hr />
+            <div class="options"></div>
+            <hr />
+            <button class="apply">Застосувати</button>
+        </div>
+
+        <div id="description">
+            <div class="type">Тип: <span id="item-type">Ігровий</span></div>
+            <div class="title" id="item-title">Колесо Фортуни</div>
+            <div class="body" id="item-desc">Натисни Roll, щоб вибрати челендж.</div>
+        </div>
+    </div>
+
+    <script src="p5.min.js"></script>
+    <script src="sketch.js"></script>
+    <script src="video.js"></script>
+    <script src="data/wheel-items.js"></script>
+    <script src="videos/manifest.js"></script>
+    <script>
+        (function () {
+            function startWheel() {
+                const script = document.createElement('script');
+                script.src = 'index.js?v=mobile-controls-1';
+                document.body.appendChild(script);
+            }
+
+            if (!document.fonts || !document.fonts.load) {
+                startWheel();
+                return;
+            }
+
+            Promise.race([
+                document.fonts.load('23px Montserrat').then(() => document.fonts.ready),
+                new Promise(resolve => setTimeout(resolve, 2500)),
+            ]).then(startWheel, startWheel);
+        }());
+    </script>
+</body>
+</html>
+

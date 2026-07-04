@@ -25,9 +25,15 @@ const selectorList = selector.querySelector('ul');
 const addCellButton = document.querySelector('.add-cell');
 const marginInput = document.getElementById('cell-left-margin');
 const tableBody = document.getElementById('effects-table-body');
+const activeEffectsText = document.getElementById('active-effects-text');
+const downloadEffects = document.getElementById('download-effects');
+const connectEffectsFileButton = document.getElementById('connect-effects-file');
+const effectsFileStatus = document.getElementById('effects-file-status');
 const cellTemplate = document.createElement('div');
 const controlDelete = document.createElement('a');
 const cellControlsTemplate = document.createElement('div');
+
+let effectsFileHandle = null;
 
 cellTemplate.className = 'cell-wrap';
 cellTemplate.innerHTML = '<div class="cell"><img alt=""></div>';
@@ -49,6 +55,8 @@ function saveState() {
         cells,
         cellsMargin,
     }));
+    updateActiveEffectsText();
+    syncEffectsFile();
 }
 
 function loadState() {
@@ -153,6 +161,7 @@ function cellOnHover() {
             const index = Array.from(inventory.querySelectorAll('.cell-wrap')).indexOf(cellWrap);
             cells.splice(index, 1);
             cellWrap.remove();
+            selectCell(false);
             saveState();
         });
         this.querySelector('.cell').appendChild(controls);
@@ -217,7 +226,7 @@ function renderEffectsTable() {
 
         nameCell.textContent = item.title;
         typeCell.textContent = item.type;
-        typeCell.className = 'type ' + (item.type === 'Фановий' ? 'type-fun' : 'type-game');
+        typeCell.className = 'type ' + (item.type === 'Образ' ? 'type-fun' : 'type-game');
         descCell.textContent = item.desc || 'Опис не заданий.';
         descCell.className = 'desc';
 
@@ -225,6 +234,192 @@ function renderEffectsTable() {
         tableBody.appendChild(row);
     });
 }
+
+function getActiveEffectsText() {
+    const activeItems = cells
+        .map((cell, index) => ({ index, item: cell.item }))
+        .filter(entry => entry.item && entry.item.title && entry.item.title !== items[0].title);
+
+    if (!activeItems.length) {
+        return 'Активних ефектів немає.';
+    }
+
+    return activeItems
+        .map(entry => `${entry.item.title} - ${getShortDescription(entry.item)}`)
+        .join('\n');
+}
+
+function getShortDescription(item) {
+    return (item.desc || 'Опис не заданий.')
+        .split('\n')[0]
+        .trim();
+}
+
+function updateActiveEffectsText() {
+    if (!activeEffectsText || !downloadEffects) {
+        return;
+    }
+
+    const text = getActiveEffectsText();
+    activeEffectsText.value = text;
+
+    if (downloadEffects.dataset.url) {
+        URL.revokeObjectURL(downloadEffects.dataset.url);
+    }
+
+    const blob = new Blob([text + '\n'], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    downloadEffects.href = url;
+    downloadEffects.dataset.url = url;
+}
+
+function setEffectsFileStatus(text, state = '') {
+    if (!effectsFileStatus) {
+        return;
+    }
+
+    effectsFileStatus.textContent = text;
+    effectsFileStatus.dataset.state = state;
+}
+
+function isFileAccessSupported() {
+    return 'showSaveFilePicker' in window && 'indexedDB' in window;
+}
+
+function openEffectsDb() {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open('vladovorot-effects', 1);
+
+        request.onupgradeneeded = () => {
+            request.result.createObjectStore('handles');
+        };
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+    });
+}
+
+async function saveEffectsFileHandle(handle) {
+    const db = await openEffectsDb();
+
+    await new Promise((resolve, reject) => {
+        const tx = db.transaction('handles', 'readwrite');
+        tx.objectStore('handles').put(handle, 'effects-txt');
+        tx.oncomplete = resolve;
+        tx.onerror = () => reject(tx.error);
+    });
+
+    db.close();
+}
+
+async function loadEffectsFileHandle() {
+    const db = await openEffectsDb();
+    const handle = await new Promise((resolve, reject) => {
+        const tx = db.transaction('handles', 'readonly');
+        const request = tx.objectStore('handles').get('effects-txt');
+        request.onsuccess = () => resolve(request.result || null);
+        request.onerror = () => reject(request.error);
+    });
+
+    db.close();
+    return handle;
+}
+
+async function verifyPermission(handle, requestWrite = false) {
+    const options = { mode: 'readwrite' };
+
+    if ((await handle.queryPermission(options)) === 'granted') {
+        return true;
+    }
+
+    if (requestWrite && (await handle.requestPermission(options)) === 'granted') {
+        return true;
+    }
+
+    return false;
+}
+
+async function writeEffectsFile(handle) {
+    const writable = await handle.createWritable();
+    await writable.write(getActiveEffectsText() + '\n');
+    await writable.close();
+}
+
+async function syncEffectsFile() {
+    if (!effectsFileHandle) {
+        return;
+    }
+
+    try {
+        if (!(await verifyPermission(effectsFileHandle))) {
+            setEffectsFileStatus('TXT підключено, але браузер чекає дозвіл на запис.', 'warning');
+            return;
+        }
+
+        await writeEffectsFile(effectsFileHandle);
+        setEffectsFileStatus('TXT оновлено автоматично.', 'ok');
+    } catch (error) {
+        console.error('Не вдалося оновити TXT файл', error);
+        setEffectsFileStatus('Не вдалося оновити TXT файл.', 'error');
+    }
+}
+
+async function connectEffectsFile() {
+    if (!isFileAccessSupported()) {
+        setEffectsFileStatus('Браузер не підтримує прямий запис у TXT. Використай Chrome/Edge або кнопку завантаження.', 'error');
+        return;
+    }
+
+    try {
+        effectsFileHandle = await window.showSaveFilePicker({
+            suggestedName: 'vladovorot-effects.txt',
+            types: [{
+                description: 'Text file',
+                accept: { 'text/plain': ['.txt'] },
+            }],
+        });
+
+        if (!(await verifyPermission(effectsFileHandle, true))) {
+            setEffectsFileStatus('Немає дозволу на запис у TXT.', 'error');
+            return;
+        }
+
+        await saveEffectsFileHandle(effectsFileHandle);
+        await writeEffectsFile(effectsFileHandle);
+        setEffectsFileStatus('TXT підключено й оновлено.', 'ok');
+    } catch (error) {
+        if (error.name !== 'AbortError') {
+            console.error('Не вдалося підключити TXT файл', error);
+            setEffectsFileStatus('Не вдалося підключити TXT файл.', 'error');
+        }
+    }
+}
+
+async function restoreEffectsFileConnection() {
+    if (!isFileAccessSupported()) {
+        setEffectsFileStatus('Прямий запис у TXT недоступний у цьому браузері.', 'error');
+        return;
+    }
+
+    try {
+        effectsFileHandle = await loadEffectsFileHandle();
+
+        if (!effectsFileHandle) {
+            setEffectsFileStatus('TXT файл не підключено.', '');
+            return;
+        }
+
+        if (await verifyPermission(effectsFileHandle)) {
+            await syncEffectsFile();
+        } else {
+            setEffectsFileStatus('TXT знайдено. Натисни “Підключити TXT”, щоб знову дозволити запис.', 'warning');
+        }
+    } catch (error) {
+        console.error('Не вдалося відновити TXT файл', error);
+        setEffectsFileStatus('Не вдалося відновити підключений TXT.', 'error');
+    }
+}
+
+connectEffectsFileButton?.addEventListener('click', connectEffectsFile);
 
 addCellButton.addEventListener('click', addCellOnClick);
 
@@ -239,3 +434,5 @@ marginInput.value = cellsMargin;
 createCells(cells);
 createSelector(items);
 renderEffectsTable();
+updateActiveEffectsText();
+restoreEffectsFileConnection();

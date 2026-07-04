@@ -107,9 +107,9 @@ p5Instance.onSelectItem = function(data, selectedKey) {
 
     image.src = getImageURI(title);
     image.title = (item && item.desc) || title || '';
-    itemType.textContent = (item && item.type) || 'Р†РіСЂРѕРІРёР№';
+    itemType.textContent = (item && item.type) || 'Ігровий';
     itemTitle.textContent = title || getCurrentWheelLabel();
-    itemDesc.textContent = (item && item.desc) || 'РћРїРёСЃ РґР»СЏ С†СЊРѕРіРѕ РїСѓРЅРєС‚Сѓ РЅРµ Р·Р°РґР°РЅРёР№.';
+    itemDesc.textContent = (item && item.desc) || 'Опис для цього пункту не заданий.';
 };
 
 const customDialog = document.getElementById('custom-list'),
@@ -183,7 +183,7 @@ function escapeHtml(value) {
 }
 
 function getCurrentWheelLabel() {
-    return currentDataSet === 'penalty' ? 'РЁС‚СЂР°С„РЅРµ РєРѕР»РµСЃРѕ' : 'РљРѕР»РµСЃРѕ Р¤РѕСЂС‚СѓРЅРё';
+    return currentDataSet === 'penalty' ? 'Штрафне колесо' : 'Колесо Фортуни';
 }
 
 function getChallengeType(title) {
@@ -202,7 +202,7 @@ function getChallengeType(title) {
         'Chat Control',
     ]);
 
-    return funChallenges.has(title) ? 'Р¤Р°РЅРѕРІРёР№' : 'Р†РіСЂРѕРІРёР№';
+    return funChallenges.has(title) ? 'Фановий' : 'Ігровий';
 }
 
 const mobileControlsToggle = document.getElementById('mobile-controls-toggle');

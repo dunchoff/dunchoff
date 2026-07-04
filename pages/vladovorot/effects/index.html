@@ -33,19 +33,6 @@
     </section>
 
     <section class="reference obs-hide">
-        <h2>Усі ефекти</h2>
-        <table class="effects-table">
-            <thead>
-                <tr>
-                    <th>Іконка</th>
-                    <th>Назва</th>
-                    <th>Тип</th>
-                    <th>Опис</th>
-                </tr>
-            </thead>
-            <tbody id="effects-table-body"></tbody>
-        </table>
-
         <h2>Налаштування OBS</h2>
         <ol class="obs-rules">
             <li>Додай 2 джерела «Браузер» (не копіюванням). Ідея в тому, що перше джерело показується на сцені, а друге приховане, бо в ньому редагуються комірки через опцію «Взаємодіяти».</li>
@@ -58,6 +45,29 @@
             <li>Увімкни опцію «<input type="checkbox" checked disabled> Оновити браузер, коли сцена стає активною».</li>
             <li>Після редагування комірок потрібно перемкнути видимість першого джерела, щоб підтягнути зроблені зміни.</li>
         </ol>
+
+        <h2>Активні ефекти для текстового файлу</h2>
+        <div class="active-effects">
+            <textarea id="active-effects-text" rows="6" readonly></textarea>
+            <div class="txt-sync-controls">
+                <button id="connect-effects-file" type="button">Підключити TXT</button>
+                <span id="effects-file-status">TXT файл не підключено.</span>
+            </div>
+            <a id="download-effects" class="download-effects" download="vladovorot-effects.txt" href="#">Завантажити TXT</a>
+        </div>
+
+        <h2>Усі ефекти</h2>
+        <table class="effects-table">
+            <thead>
+                <tr>
+                    <th>Іконка</th>
+                    <th>Назва</th>
+                    <th>Тип</th>
+                    <th>Опис</th>
+                </tr>
+            </thead>
+            <tbody id="effects-table-body"></tbody>
+        </table>
     </section>
 
     <script src="../data/wheel-items.js"></script>
